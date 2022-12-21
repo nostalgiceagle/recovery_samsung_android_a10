@@ -56,8 +56,8 @@ TARGET_BOARD_PLATFORM := exynos5
 TARGET_BOARD_PLATFORM_GPU := mali-g71
 
 # Kernel
-TARGET_PREBUILT_KERNEL := device/samsung/a10/prebuilt/Image
-BOARD_PREBUILT_DTBOIMAGE := device/samsung/a10/prebuilt/recoverydtbo
+TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/prebuilt/Image
+BOARD_PREBUILT_DTBOIMAGE := $(LOCAL_PATH)/prebuilt/recoverydtbo
 BOARD_INCLUDE_RECOVERY_DTBO := true
 TARGET_KERNEL_ARCH := arm64
 
@@ -75,7 +75,7 @@ BOARD_MKBOOTIMG_ARGS := --kernel_offset $(BOARD_KERNEL_OFFSET) --ramdisk_offset 
 BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_KERNEL_TAGS_OFFSET) --second_offset $(BOARD_KERNEL_SECOND_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION) --pagesize $(BOARD_KERNEL_PAGESIZE) --board "SRPSA10A004RU"
 BOARD_MKBOOTIMG_ARGS += --recovery_dtbo $(BOARD_PREBUILT_DTBOIMAGE)
-BOARD_CUSTOM_BOOTIMG_MK := device/samsung/a10/mkboot/bootimg.mk
+BOARD_CUSTOM_BOOTIMG_MK := $(LOCAL_PATH)/mkboot/bootimg.mk
 
 # Recovery
 BOARD_HAS_LARGE_FILESYSTEM := true
