@@ -1,42 +1,46 @@
-name: Build and Upload
+name: Build Recovery for Samsung Galala A10
 
+# Trigger workflow manually using workflow_dispatch
 on:
   workflow_dispatch:
-    branches:
-      - fox-a10
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      # Set up Java (if required for the build)
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
         with:
-          ref: fox-a10
+          java-version: '11'
 
-      - name: Check for buildenv.sh and execute
-        if: ${{ exists('buildenv.sh') }}
-        run: |
-          chmod +x ./buildenv.sh
-          ./buildenv.sh
+      # Set up Android SDK (if required)
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v2
+        with:
+          api-level: 30
+          build-tools-version: 30.0.3
 
-      - name: Check for build_ofox.sh and execute
-        if: ${{ exists('build_ofox.sh') }}
+      # Install dependencies if any
+      - name: Install build dependencies
         run: |
-          chmod +x ./build_ofox.sh
-          ./build_ofox.sh
+          sudo apt-get update
+          sudo apt-get install -y build-essential
 
-      - name: Find the created zip file
+      # Run makefile to build the recovery
+      - name: Build recovery
         run: |
-          # Assuming the generated zip is stored in the current directory or subdirectories
-          export CREATED_ZIP=$(find . -type f -name "*.zip" | head -n 1)
-          echo "CREATED_ZIP=$CREATED_ZIP" >> $GITHUB_ENV
+          make clean
+          make recovery_image
 
-      - name: Upload the zip file to bashupload.com
-        run: |
-          if [ -z "$CREATED_ZIP" ]; then
-            echo "No zip file found to upload."
-            exit 1
-          fi
-          curl bashupload.com -T "$CREATED_ZIP"
+      # Archive the build output (if needed)
+      - name: Upload recovery image
+        uses: actions/upload-artifact@v3
+        with:
+          name: recovery-image
+          path: output/recovery.img  # Adjust the path based on where the image is saved
