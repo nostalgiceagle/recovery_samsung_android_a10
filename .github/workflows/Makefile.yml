@@ -23,11 +23,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential
 
-      # Run lunch to set up the build target
-      - name: Set up build target
-        run: |
-          lunch omni_a10-eng
-
       # Run make to build the recovery image
       - name: Build recovery image
         run: |
