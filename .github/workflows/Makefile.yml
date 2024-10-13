@@ -5,6 +5,8 @@ on:
     branches:
       - fox-a10
 
+workflow_dispatch:
+     env:
 jobs:
   build:
     runs-on: ubuntu-latest
