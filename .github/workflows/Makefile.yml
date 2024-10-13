@@ -1,18 +1,44 @@
-name: Makefile CI
+name: Build and Upload
 
 on:
   push:
-    branches: [ "fox-11" ]
-  pull_request:
-    branches: [ "fox-11" ]
+    branches:
+      - fox-a10
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-    - name: configure
-      run: ./build_ofox.sh
+    - name: Run buildenv.sh if it exists
+      shell: bash
+      run: |
+        if [ -f ./buildenv.sh ]; then
+          chmod +x ./buildenv.sh
+          ./buildenv.sh
+        else
+          echo "buildenv.sh not found, skipping."
+        fi
+
+    - name: Run build_ofox.sh if it exists
+      shell: bash
+      run: |
+        if [ -f ./build_ofox.sh ]; then
+          chmod +x ./build_ofox.sh
+          ./build_ofox.sh
+        else
+          echo "build_ofox.sh not found, skipping."
+        fi
+
+    - name: Find and zip build output
+      run: |
+        # Replace this with the correct path to your build output
+        # or change the file names if needed
+        zip -r build_output.zip path_to_build_output/
+
+    - name: Upload to bashupload.com
+      run: |
+        curl bashupload.com -T build_output.zip
