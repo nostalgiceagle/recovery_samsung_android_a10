@@ -1,46 +1,42 @@
 name: Build and Upload
 
 on:
-  push:
+  workflow_dispatch:
     branches:
       - fox-a10
 
-workflow_dispatch:
-     env:
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: fox-a10
 
-    - name: Run buildenv.sh if it exists
-      shell: bash
-      run: |
-        if [ -f ./buildenv.sh ]; then
+      - name: Check for buildenv.sh and execute
+        if: ${{ exists('buildenv.sh') }}
+        run: |
           chmod +x ./buildenv.sh
           ./buildenv.sh
-        else
-          echo "buildenv.sh not found, skipping."
-        fi
 
-    - name: Run build_ofox.sh if it exists
-      shell: bash
-      run: |
-        if [ -f ./build_ofox.sh ]; then
+      - name: Check for build_ofox.sh and execute
+        if: ${{ exists('build_ofox.sh') }}
+        run: |
           chmod +x ./build_ofox.sh
           ./build_ofox.sh
-        else
-          echo "build_ofox.sh not found, skipping."
-        fi
 
-    - name: Find and zip build output
-      run: |
-        # Replace this with the correct path to your build output
-        # or change the file names if needed
-        zip -r build_output.zip path_to_build_output/
+      - name: Find the created zip file
+        run: |
+          # Assuming the generated zip is stored in the current directory or subdirectories
+          export CREATED_ZIP=$(find . -type f -name "*.zip" | head -n 1)
+          echo "CREATED_ZIP=$CREATED_ZIP" >> $GITHUB_ENV
 
-    - name: Upload to bashupload.com
-      run: |
-        curl bashupload.com -T build_output.zip
+      - name: Upload the zip file to bashupload.com
+        run: |
+          if [ -z "$CREATED_ZIP" ]; then
+            echo "No zip file found to upload."
+            exit 1
+          fi
+          curl bashupload.com -T "$CREATED_ZIP"
