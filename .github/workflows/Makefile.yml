@@ -1,4 +1,4 @@
-name: Build Recovery 
+name: Build Recovery for Samsung Android A10
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
       build_target:
         description: 'Target build type (e.g., recovery_image)'
         required: true
-        default: 'recovery_image'
+        default: 'recoveryimage'
 
 jobs:
   build:
@@ -23,14 +23,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential
 
-      # Run makefile to build the specified target
-      - name: Build recovery
+      # Set up the Android build environment
+      - name: Set up Android build environment
         run: |
-          make ${{ github.event.inputs.build_target }}
+          source build/envsetup.sh
+          lunch omni_a10-eng
+
+      # Run make to build the recovery image
+      - name: Build recovery image
+        run: |
+          make recoveryimage -j$(nproc --all)
 
       # Archive the build output (if needed)
       - name: Upload recovery image
         uses: actions/upload-artifact@v3
         with:
           name: recovery-image
-          path: output/recovery.img  # Adjust the path based on where the image is saved
+          path: out/target/product/a10/recovery.img  # Adjust the path based on where the image is saved
