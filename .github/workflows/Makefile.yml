@@ -1,8 +1,12 @@
-name: Build Recovery for Samsung Galala A10
+name: Build Recovery for Samsung GALLLLLALA A10
 
-# Trigger workflow manually using workflow_dispatch
 on:
   workflow_dispatch:
+    inputs:
+      build_target:
+        description: 'Target build'
+        required: true
+        default: 'recovery_image'
 
 jobs:
   build:
@@ -32,11 +36,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential
 
-      # Run makefile to build the recovery
+      # Run makefile to build the specified target
       - name: Build recovery
         run: |
           make clean
-          make recovery_image
+          make ${{ github.event.inputs.build_target }}
 
       # Archive the build output (if needed)
       - name: Upload recovery image
