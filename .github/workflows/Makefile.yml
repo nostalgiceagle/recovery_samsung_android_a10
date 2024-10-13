@@ -26,7 +26,6 @@ jobs:
       # Run makefile to build the specified target
       - name: Build recovery
         run: |
-          make clean
           make ${{ github.event.inputs.build_target }}
 
       # Archive the build output (if needed)
