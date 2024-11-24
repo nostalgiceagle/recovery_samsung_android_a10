@@ -21,7 +21,7 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential
+          sudo apt-get install -y build-essential ccache
 
       # Run make to build the recovery image
       - name: Build recovery image
