@@ -26,8 +26,9 @@ jobs:
       # Run make to build the recovery image
       - name: Build recovery image
         run: |
-          make recoveryimage -j$(nproc --all)
-
+          . build/envsetup.sh
+            lunch omni_a10-eng
+            make recoveryimage -j$(nproc --all)
       # Archive the build output (if needed)
       - name: Upload recovery image
         uses: actions/upload-artifact@v3
