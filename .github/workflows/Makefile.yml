@@ -26,7 +26,7 @@ jobs:
       # Run make to build the recovery image
       - name: Build recovery image
         run: |
-          . build/envsetup.sh
+            ./vendorsetup.sh
             lunch omni_a10-eng
             make recoveryimage -j$(nproc --all)
       # Archive the build output (if needed)
