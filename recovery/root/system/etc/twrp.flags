@@ -16,9 +16,9 @@
 /modem		emmc	/dev/block/platform/13500000.dwmmc0/by-name/radio	flags=backup=1;display="Modem"
 /misc		emmc	/dev/block/platform/13500000.dwmmc0/by-name/misc        flags=backup=1;display="Misc"
 /cp_debug	emmc	/dev/block/platform/13500000.dwmmc0/by-name/cp_debug	flags=backup=1;display="CP Debug"
-/param		emmc	/dev/block/platform/13500000.dwmmc0/by-name/param	flags=backup=1;display="Param"
-/dtb		emmc	/dev/block/platform/13500000.dwmmc0/by-name/dtb		flags=backup=1;display="DTB"
-/dtbo		emmc	/dev/block/platform/13500000.dwmmc0/by-name/dtbo	flags=backup=1;display="DTBO"
+/param		emmc	/dev/block/platform/13500000.dwmmc0/by-name/param	flags=backup=1;flashimg;display="Param"
+/dtb		emmc	/dev/block/platform/13500000.dwmmc0/by-name/dtb		flags=backup=1;flashimg;display="DTB"
+/dtbo		emmc	/dev/block/platform/13500000.dwmmc0/by-name/dtbo	flags=backup=1;flashimg;display="DTBO"
 
 # Removable storage
 /external_sd	vfat	/dev/block/mmcblk1p1	/dev/block/mmcblk1		flags=storage;wipeingui;removable
